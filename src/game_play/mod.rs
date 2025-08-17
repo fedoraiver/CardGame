@@ -37,13 +37,18 @@ impl Plugin for GamePlayPlugin {
         app.add_plugins(MeshPickingPlugin);
         app.add_plugins(Material2dPlugin::<BackgroundMaterial>::default());
         app.add_plugins(Material2dPlugin::<MyTextureAtlasMaterial>::default());
-        app.add_systems(Startup, setup_camera);
-        app.add_systems(OnEnter(AppState::InGame), setup_background);
         app.add_event::<SelectItem>();
         app.add_event::<UnSelectItem>();
         app.add_event::<MoveItem>();
         app.init_resource::<CursorPressedAtItem>();
-
+        app.add_systems(Startup, setup_camera);
+        app.add_systems(
+            OnTransition {
+                exited: AppState::MainMenu,
+                entered: AppState::InGame,
+            },
+            setup_background,
+        );
         app.add_systems(
             Update,
             (tilt_card, move_card, hover_card, select_card, camera_shake)

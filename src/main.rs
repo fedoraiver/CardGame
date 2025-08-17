@@ -22,6 +22,7 @@ use resources::*;
 use states::*;
 use systems::*;
 
+use bevy::window::*;
 use bevy::{log::*, prelude::*};
 use bevy_hanabi::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
@@ -30,13 +31,21 @@ use bevy_trauma_shake::TraumaPlugin;
 fn main() {
     let mut app = App::new();
 
-    // TODO: WindowsPlugin 设置 + cursor 图案
+    // TODO: cursor 图案
     app.add_plugins(
         DefaultPlugins
             .set(ImagePlugin::default_nearest())
             .set(LogPlugin {
                 level: Level::INFO,
                 ..Default::default()
+            })
+            .set(WindowPlugin {
+                primary_window: Some(Window {
+                    title: "PokerAutomata".into(),
+                    mode: WindowMode::BorderlessFullscreen(MonitorSelection::Current),
+                    ..default()
+                }),
+                ..default()
             }),
     );
     app.add_plugins(EguiPlugin::default());
