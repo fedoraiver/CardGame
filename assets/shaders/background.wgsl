@@ -1,5 +1,37 @@
-#import bevy_sprite::mesh2d_vertex_output::VertexOutput
-#import bevy_sprite::mesh2d_view_bindings::globals
+// #import bevy_sprite::mesh2d_vertex_output::VertexOutput
+
+struct VertexOutput {
+    // this is `clip position` when the struct is used as a vertex stage output 
+    // and `frag coord` when used as a fragment stage input
+    @builtin(position) position: vec4<f32>,
+    @location(0) world_position: vec4<f32>,
+    @location(1) world_normal: vec3<f32>,
+    @location(2) uv: vec2<f32>,
+    #ifdef VERTEX_TANGENTS
+    @location(3) world_tangent: vec4<f32>,
+    #endif
+    #ifdef VERTEX_COLORS
+    @location(4) color: vec4<f32>,
+    #endif
+}
+
+// #import bevy_sprite::mesh2d_view_bindings::globals
+struct Globals {
+    // The time since startup in seconds
+    // Wraps to 0 after 1 hour.
+    time: f32,
+    // The delta time since the previous frame in seconds
+    delta_time: f32,
+    // Frame count since the start of the app.
+    // It wraps to zero when it reaches the maximum value of a u32.
+    frame_count: u32,
+#ifdef SIXTEEN_BYTE_ALIGNMENT
+    // WebGL2 structs must be 16 byte aligned.
+    _webgl2_padding: f32
+#endif
+};
+@group(0) @binding(1) var<uniform> globals: Globals;
+
 
 @group(2) @binding(0) var<uniform> random:vec3<f32>;
 
@@ -60,7 +92,7 @@ fn map(p_in: vec2f) -> vec3<f32> {
 
 @fragment
 fn fragment(in: VertexOutput) -> @location(0) vec4<f32> {
-    let p = in.uv * 2  ;
+    let p = in.uv * 2.0  ;
     let e = 0.005;
 
     let colc = map(p);
