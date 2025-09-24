@@ -4,18 +4,23 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = {version = "*", features = ["file_watcher"]}
-bevy_hanabi = {version = "*"}
-bevy-inspector-egui = {version = "*",features = ["highlight_changes"]}
-bevy_egui = {version = "*"}
-bevy_mod_debugdump = {version = "*", optional = true}
-bevy_screen_diagnostics= {version ="*", optional = true}
-bevy_trauma_shake = {version = "*"}
-strum = {version="*"}
-strum_macros = {version="*"}
-serde = {version = "*", features = ["derive"] }
-serde_json = {version = "*"}
-rand = {version = "*"}
+bevy = { version = "*", features = ["file_watcher"] }
+bevy_egui = { version = "*" }
+bevy_hanabi = { version = "*" }
+bevy-inspector-egui = { version = "*", features = ["highlight_changes"] }
+bevy_mod_debugdump = { version = "*", optional = true }
+bevy_screen_diagnostics = { version = "*", optional = true }
+bevy_trauma_shake = { version = "*" }
+rand = { version = "*" }
+serde = { version = "*", features = ["derive"] }
+serde_json = { version = "*" }
+strum = { version = "*" }
+strum_macros = { version = "*" }
+
+[features]
+bevy_mod_debugdump_plugin = ["dep:bevy_mod_debugdump"]
+bevy_screen_diagnostics_plugin = ["dep:bevy_screen_diagnostics"]
+sysinfo_plugin = ["bevy_screen_diagnostics/sysinfo_plugin"]
 
 [profile.dev]
 opt-level = 0
@@ -23,7 +28,3 @@ opt-level = 0
 [profile.dev.package."*"]
 opt-level = 3
 
-[features]
-bevy_screen_diagnostics_plugin=["dep:bevy_screen_diagnostics"]
-sysinfo_plugin=["bevy_screen_diagnostics/sysinfo_plugin"]
-bevy_mod_debugdump_plugin=["dep:bevy_mod_debugdump"]
