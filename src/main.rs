@@ -24,7 +24,6 @@ use systems::*;
 
 use bevy::window::*;
 use bevy::{log::*, prelude::*};
-use bevy_hanabi::prelude::*;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_trauma_shake::TraumaPlugin;
 
@@ -71,7 +70,6 @@ fn main() {
     app.init_state::<AppState>();
 
     app.add_plugins(MainMenuPlugin);
-    app.add_plugins(HanabiPlugin);
     app.add_plugins(GamePlayPlugin);
     app.add_plugins(PostProcessPlugin);
 
