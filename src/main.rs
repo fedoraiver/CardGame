@@ -76,6 +76,7 @@ fn main() {
     app.add_systems(Startup, register_my_observers);
     app.add_systems(Startup, register_cards_aseprite_metadata);
     app.add_systems(Update, toggle_pause_state);
+    app.add_systems(Update, quit_game);
 
     app.run();
 }
