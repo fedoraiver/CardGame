@@ -25,6 +25,8 @@ use bevy::{
     ui_render::graph::NodeUi,
 };
 
+use bevy_inspector_egui::bevy_egui::render::graph::NodeEgui;
+
 const SHADER_ASSET_PATH: &str = "shaders/crt_post_processing.wgsl";
 
 #[derive(Component, Default, Clone, Copy, ExtractComponent, ShaderType)]
@@ -63,7 +65,12 @@ impl Plugin for PostProcessPlugin {
             .add_render_graph_node::<ViewNodeRunner<PostProcessNode>>(Core2d, PostProcessLabel)
             .add_render_graph_edges(
                 Core2d,
-                (NodeUi::UiPass, PostProcessLabel, Node2d::Upscaling),
+                (
+                    NodeUi::UiPass,
+                    PostProcessLabel,
+                    NodeEgui::EguiPass,
+                    Node2d::Upscaling,
+                ),
             );
     }
     fn finish(&self, app: &mut App) {

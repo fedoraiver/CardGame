@@ -17,6 +17,8 @@ use systems::*;
 use bevy::window::*;
 use bevy::{log::*, prelude::*};
 
+use bevy_inspector_egui::{bevy_egui::EguiPlugin, quick::WorldInspectorPlugin};
+
 fn main() {
     let mut app = App::new();
 
@@ -37,6 +39,9 @@ fn main() {
                 ..default()
             }),
     );
+
+    app.add_plugins(EguiPlugin::default())
+        .add_plugins(WorldInspectorPlugin::new());
 
     app.init_resource::<ZIndexManager>();
     app.init_state::<AppState>();
