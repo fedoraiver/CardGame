@@ -18,7 +18,7 @@ pub fn toggle_pause_state(
     }
 }
 
-pub fn quit_game(keyboard_input: Res<ButtonInput<KeyCode>>, mut exit: EventWriter<AppExit>) {
+pub fn quit_game(keyboard_input: Res<ButtonInput<KeyCode>>, mut exit: MessageWriter<AppExit>) {
     if keyboard_input.just_pressed(KeyCode::Escape) {
         exit.write(AppExit::Success);
     }
@@ -87,33 +87,6 @@ pub fn register_my_observers(mut cmd: Commands) {
             Name::new("cursor_drag_end_at_movable_by_cursor_item_observer"),
         ),
     ]);
-}
-
-#[cfg(feature = "bevy_mod_debugdump_plugin")]
-pub fn output_render_graph(app: &mut App) {
-    use bevy_mod_debugdump::*;
-    let dot = render_graph_dot(app, &render_graph::Settings::default());
-    if let Err(err) = std::fs::write("graph/render_graph.dot", dot) {
-        error!("Failed to write render graph: {}", err);
-    } else {
-        info!("Render graph written to render_graph.dot");
-    }
-}
-
-#[cfg(feature = "bevy_mod_debugdump_plugin")]
-pub fn output_schedule_graph<L: bevy::ecs::schedule::ScheduleLabel>(
-    app: &mut App,
-    schedule_label: L,
-) {
-    use bevy_mod_debugdump::*;
-    let dot = schedule_graph_dot(app, schedule_label, &schedule_graph::Settings::default());
-    if let Err(err) = std::fs::create_dir_all("graph")
-        .and_then(|_| std::fs::write("graph/schedule_graph.dot", dot))
-    {
-        error!("Failed to write schedule graph: {}", err);
-    } else {
-        info!("Schedule graph written to graph/schedule_graph.dot");
-    }
 }
 
 pub fn register_cards_aseprite_metadata(mut cmd: Commands) {

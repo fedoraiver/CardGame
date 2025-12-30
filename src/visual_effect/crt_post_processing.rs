@@ -1,7 +1,7 @@
 use bevy::{
     core_pipeline::{
+        FullscreenShader,
         core_2d::graph::{Core2d, Node2d},
-        fullscreen_vertex_shader::fullscreen_shader_vertex_state,
     },
     ecs::query::QueryItem,
     prelude::*,
@@ -13,7 +13,7 @@ use bevy::{
         },
         globals::{GlobalsBuffer, GlobalsUniform},
         render_graph::{
-            NodeRunError, RenderGraphApp, RenderGraphContext, RenderLabel, ViewNode, ViewNodeRunner,
+            NodeRunError, RenderGraphContext, RenderGraphExt, RenderLabel, ViewNode, ViewNodeRunner,
         },
         render_resource::{
             binding_types::{sampler, texture_2d, uniform_buffer},
@@ -22,9 +22,8 @@ use bevy::{
         renderer::{RenderContext, RenderDevice},
         view::ViewTarget,
     },
-    ui::graph::NodeUi,
+    ui_render::graph::NodeUi,
 };
-use bevy_inspector_egui::bevy_egui::render::graph::NodeEgui;
 
 const SHADER_ASSET_PATH: &str = "shaders/crt_post_processing.wgsl";
 
@@ -64,12 +63,7 @@ impl Plugin for PostProcessPlugin {
             .add_render_graph_node::<ViewNodeRunner<PostProcessNode>>(Core2d, PostProcessLabel)
             .add_render_graph_edges(
                 Core2d,
-                (
-                    NodeUi::UiPass,
-                    PostProcessLabel,
-                    NodeEgui::EguiPass,
-                    Node2d::Upscaling,
-                ),
+                (NodeUi::UiPass, PostProcessLabel, Node2d::Upscaling),
             );
     }
     fn finish(&self, app: &mut App) {
@@ -131,6 +125,7 @@ impl ViewNode for PostProcessNode {
             color_attachments: &[Some(RenderPassColorAttachment {
                 view: post_process.destination,
                 resolve_target: None,
+                depth_slice: None,
                 ops: Operations::default(),
             })],
             depth_stencil_attachment: None,
@@ -171,15 +166,18 @@ impl FromWorld for PostProcessPipeline {
 
         let pipeline_id =
             world
-                .resource_mut::<PipelineCache>()
+                .resource::<PipelineCache>()
                 .queue_render_pipeline(RenderPipelineDescriptor {
                     label: Some("post_process_pipeline".into()),
                     layout: vec![layout.clone()],
-                    vertex: fullscreen_shader_vertex_state(),
+                    vertex: world
+                        .resource::<FullscreenShader>()
+                        .clone()
+                        .to_vertex_state(),
                     fragment: Some(FragmentState {
                         shader,
                         shader_defs: vec![],
-                        entry_point: "fragment".into(),
+                        entry_point: Some("fragment".into()),
                         targets: vec![Some(ColorTargetState {
                             format: TextureFormat::bevy_default(),
                             blend: None,

@@ -42,7 +42,7 @@ pub fn normal_text_style(text: String) -> (Text, TextLayout) {
     (
         Text(text),
         TextLayout {
-            justify: JustifyText::Center,
+            justify: Justify::Center,
             ..Default::default()
         },
     )

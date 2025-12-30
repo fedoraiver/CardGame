@@ -3,7 +3,7 @@ use crate::game_play::{
     systems::setup::{CARD_HEIGHT, CARD_WIDTH},
 };
 
-use bevy::{prelude::*, render::mesh::*};
+use bevy::{mesh::VertexAttributeValues, prelude::*};
 
 const SCALE_FACTOR: f32 = 0.08;
 const RESET_FACTOR: f32 = 0.95;

@@ -6,26 +6,16 @@ mod states;
 mod systems;
 mod util;
 mod visual_effect;
-#[cfg(feature = "bevy_screen_diagnostics_plugin")]
-mod diagnostics {
-    pub use bevy_screen_diagnostics::*;
-
-    #[cfg(feature = "sysinfo_plugin")]
-    pub use bevy_screen_diagnostics::ScreenSystemInformationDiagnosticsPlugin;
-}
 
 use crate::game_play::*;
 use crate::main_menu::*;
 use crate::visual_effect::crt_post_processing::PostProcessPlugin;
-use bevy_inspector_egui::bevy_egui::*;
 use resources::*;
 use states::*;
 use systems::*;
 
 use bevy::window::*;
 use bevy::{log::*, prelude::*};
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use bevy_trauma_shake::TraumaPlugin;
 
 fn main() {
     let mut app = App::new();
@@ -47,24 +37,6 @@ fn main() {
                 ..default()
             }),
     );
-    app.add_plugins(EguiPlugin::default());
-    app.add_plugins(WorldInspectorPlugin::new());
-    app.add_plugins(TraumaPlugin);
-    #[cfg(feature = "bevy_mod_debugdump_plugin")]
-    {
-        output_render_graph(&mut app);
-        output_schedule_graph(&mut app, Update);
-    }
-
-    #[cfg(feature = "bevy_screen_diagnostics_plugin")]
-    {
-        app.add_plugins(diagnostics::ScreenDiagnosticsPlugin::default())
-            .add_plugins(diagnostics::ScreenFrameDiagnosticsPlugin)
-            .add_plugins(diagnostics::ScreenEntityDiagnosticsPlugin);
-
-        #[cfg(feature = "sysinfo_plugin")]
-        app.add_plugins(diagnostics::ScreenSystemInformationDiagnosticsPlugin);
-    }
 
     app.init_resource::<ZIndexManager>();
     app.init_state::<AppState>();

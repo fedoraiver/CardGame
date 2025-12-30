@@ -4,7 +4,6 @@ use crate::resources::CardsAsePriteMetadata;
 use crate::visual_effect::crt_post_processing::*;
 
 use bevy::prelude::*;
-use bevy_trauma_shake::*;
 use rand::*;
 
 pub const CARD_WIDTH: f32 = 64.0;
@@ -23,11 +22,11 @@ pub fn setup_background(
     mut materials3: ResMut<Assets<ColorMaterial>>,
     mut observer_query: Query<&mut Observer>,
 ) {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let random = vec3(
-        rng.gen_range(1.0e2..1.0e4),
-        rng.gen_range(1.0e2..1.0e4),
-        rng.gen_range(1.0e2..1.0e4),
+        rng.random_range(1.0e2..1.0e4),
+        rng.random_range(1.0e2..1.0e4),
+        rng.random_range(1.0e2..1.0e4),
     );
     debug!("{}", random);
 
@@ -61,7 +60,7 @@ pub fn setup_camera(mut cmd: Commands) {
         Camera2d,
         MainCamera,
         Projection::Orthographic(OrthographicProjection {
-            scaling_mode: bevy::render::camera::ScalingMode::AutoMin {
+            scaling_mode: bevy::camera::ScalingMode::AutoMin {
                 min_width: (CANVAS_WIDTH),
                 min_height: (CANVAS_HEIGHT),
             },
@@ -74,6 +73,5 @@ pub fn setup_camera(mut cmd: Commands) {
             gamma: 1.0,
             brightness: 0.03,
         },
-        Shake::default(),
     ));
 }

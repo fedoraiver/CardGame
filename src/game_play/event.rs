@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct SelectItem {
     pub entity: Entity,
 }
@@ -11,7 +11,7 @@ impl SelectItem {
     }
 }
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct UnSelectItem {
     pub entity: Entity,
 }
@@ -22,7 +22,7 @@ impl UnSelectItem {
     }
 }
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct MoveItem {
     pub entity: Entity,
     pub delta_transform: Transform,

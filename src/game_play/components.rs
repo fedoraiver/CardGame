@@ -1,7 +1,8 @@
 use bevy::prelude::*;
 use bevy::reflect::TypePath;
 use bevy::render::render_resource::*;
-use bevy::sprite::*;
+use bevy::shader::ShaderRef;
+use bevy::sprite_render::*;
 use strum_macros::*;
 
 #[derive(Component, Reflect)]

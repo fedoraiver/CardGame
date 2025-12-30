@@ -3,7 +3,7 @@ use crate::game_play::{components::*, event::*};
 use bevy::prelude::*;
 pub fn move_card(
     mut query: Query<&mut Transform, (With<Card>, With<IsMoving>)>,
-    mut move_event_reader: EventReader<MoveItem>,
+    mut move_event_reader: MessageReader<MoveItem>,
 ) {
     // TODO: movement 平移光滑 + 旋转 + cursor 隐藏
     for move_event in move_event_reader.read() {

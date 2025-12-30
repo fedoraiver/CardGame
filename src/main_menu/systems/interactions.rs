@@ -33,7 +33,7 @@ pub fn interact_with_quit_button(
         (&Interaction, &mut BackgroundColor),
         (Changed<Interaction>, With<QuitButton>),
     >,
-    mut exit: EventWriter<AppExit>,
+    mut exit: MessageWriter<AppExit>,
 ) {
     if let Ok((interaction, mut background_color)) = query.single_mut() {
         match *interaction {
