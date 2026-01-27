@@ -45,7 +45,7 @@ struct PostProcessLabel;
 
 #[derive(Resource)]
 struct PostProcessPipeline {
-    layout: BindGroupLayout,
+    layout: BindGroupLayoutDescriptor,
     sampler: Sampler,
     pipeline_id: CachedRenderPipelineId,
 }
@@ -116,9 +116,11 @@ impl ViewNode for PostProcessNode {
 
         let post_process = view_target.post_process_write();
 
+        let bind_group_layout = pipeline_cache.get_bind_group_layout(&post_process_pipeline.layout);
+
         let bind_group = render_context.render_device().create_bind_group(
             "post_process_bind_group",
-            &post_process_pipeline.layout,
+            &bind_group_layout,
             &BindGroupEntries::sequential((
                 post_process.source,
                 &post_process_pipeline.sampler,
@@ -152,7 +154,7 @@ impl FromWorld for PostProcessPipeline {
     fn from_world(world: &mut World) -> Self {
         let render_device = world.resource::<RenderDevice>();
 
-        let layout = render_device.create_bind_group_layout(
+        let layout = BindGroupLayoutDescriptor::new(
             "post_process_bind_group_layout",
             &BindGroupLayoutEntries::sequential(
                 ShaderStages::FRAGMENT,

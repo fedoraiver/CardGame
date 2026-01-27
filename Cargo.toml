@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = { version = "=0.17.3", features = ["file_watcher"] }
-bevy-inspector-egui = { version = "=0.35", features = ["highlight_changes"] }
+bevy = { version = "=0.18.0", features = ["file_watcher"] }
+bevy-inspector-egui = { version = "=0.36", features = ["highlight_changes"] }
 rand = { version = "*" }
 serde = { version = "*", features = ["derive"] }
 serde_json = { version = "*" }
